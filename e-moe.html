@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Гостиница "Е-моё"</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            font-size: 18px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #007bff;
+            text-align: center;
+            font-size: 32px;
+        }
+
+        p {
+            text-align: justify;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        ul {
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 20px;
+        }
+
+        .image {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .image img {
+            max-width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .address {
+            text-align: center;
+            margin-top: 20px;
+            font-style: italic;
+            color: #555;
+        }
+
+        .highlight {
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .price {
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .contact-info {
+            margin-top: 30px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .map-container {
+            margin-top: 50px;
+            text-align: center;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 420px;
+            border: none;
+            border-radius: 20px;
+
+
+        }
+
+        /* Навигационное меню */
+        nav {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        nav li {
+            margin-right: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            font-size: 18px;
+            transition: color 0.3s ease;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        nav a:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+
+        /* Кнопка вверх */
+        #btnUp,
+        #btnDown {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            z-index: 99;
+            display: none;
+            position: fixed;
+        }
+
+        #btnUp {
+            bottom: 20px;
+            right: 20px;
+        }
+
+        #btnDown {
+            bottom: 80px;
+            right: 20px;
+        }
+/* Стили для кнопки */
+        .booking-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 99;
+    position: fixed;
+    bottom: 20px;
+    left: 20px; /* Положение кнопки слева */
+    transition: background-color 0.3s ease;
+}
+
+
+        .booking-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Стили для контактов */
+        .contact-container {
+            background-color: #000;
+            color: #fff;
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .contact-container h2 {
+            margin-bottom: 20px;
+        }
+
+        .contact-container p {
+            margin-bottom: 10px;
+        }
+
+        .contact-container a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .contact-container a:hover {
+            color: #ccc;
+        }
+
+
+        /* Стили для описания услуг */
+        .service-description {
+            background-color: #007bff;
+            color: #fff;
+            padding: 20px;
+            border-radius: 20px;
+            text-align: justify;
+            margin-top: 50px;
+
+        }
+
+        .service-description h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .service-description ul {
+            padding: 0;
+        }
+
+        .service-description li {
+            margin-bottom: 10px;
+        }
+/* Стили для формы бронирования */
+.booking-form {
+    display: none;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    width: 300px; /* Указываем фиксированную ширину */
+}
+
+.booking-form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.booking-form input[type="date"],
+.booking-form input[type="tel"],
+.booking-form input[type="text"] {
+    width: calc(100% - 22px); /* Уменьшаем ширину на величину паддинга и границы */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px; /* Добавляем отступ между элементами */
+}
+
+.booking-form input[type="submit"],
+.booking-form button {
+    width: 100%; /* Растягиваем кнопку на всю ширину */
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    margin-top: 10px; /* Добавляем отступ сверху */
+}
+
+.booking-form button {
+    background-color: #ccc; /* Изменяем цвет кнопки "Закрыть" */
+    margin-top: 0; /* Убираем верхний отступ */
+}
+
+.booking-form input[type="submit"]:hover,
+.booking-form button:hover {
+    background-color: #0056b3;
+}
+
+/* Стили для кнопки "О нас" */
+        nav a#about-btn {
+            background-color: #8b0000; /* Темно-красный цвет */
+        }
+
+        /* Стили для кнопки "Услуги" */
+        nav a#services-btn {
+            background-color: #ffc107; /* Желтый цвет */
+        }
+
+        /* Стили для кнопки "Контакты" */
+        nav a#contact-btn {
+            background-color: #000; /* Черный цвет */
+            color: #fff; /* Белый текст */
+        }
+
+        /* Стили для раздела "О нас" */
+        #about {
+            background-color: #8b0000; /* Темно-красный цвет */
+            color: #fff; /* Белый текст */
+        }
+
+        /* Стили для раздела "Услуги" */
+        #services {
+            background-color: #ffc107; /* Желтый цвет */
+            color: #333; /* Черный текст */
+        }
+
+        /* Стили для раздела "Контакты" */
+        #contact {
+            background-color: #000; /* Черный цвет */
+            color: #fff; /* Белый текст */
+        }
+/* Стили для списка услуг */
+.service-list {
+    background-color: #ffc107; /* Желтый фон */
+    padding: 20px; /* Внутренние отступы */
+    border-radius: 20px; /* Радиус скругления углов */
+    margin-top: 50px; /* Внешний отступ сверху */
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Гостиница "Ё-моё"</h1>
+        <nav>
+           <ul>
+            <li><a id="about-btn" href="#about">О нас</a></li>
+            <li><a id="services-btn" href="#yslygi">Услуги</a></li>
+            <li><a id="contact-btn" href="#contact">Контакты</a></li>
+        </ul>
+        </nav>
+        <div class="image">
+            <img src="https://avatars.mds.yandex.net/get-altay/1042100/2a000001682ef78e0c3509d2cd71823db2e4/XXL_height" alt="Фотография гостиницы">
+        </div>
+        <div class="description">
+            <p>
+                Добро пожаловать в гостиницу <span class="highlight">"Е-моё"</span>! Здесь вы найдете все необходимое для приятного отдыха и расслабления:
+            </p>
+            <ul class="service-list" id="yslygi">
+                <li><strong>Автомойка:</strong> Полностью оборудованная автомойка для вашего автомобиля. <span class="price">Стоимость: 500 рублей.</span></li>
+                <li><strong>Столовая:</strong> Разнообразное меню с блюдами на любой вкус. Завтрак, обед, ужин - у нас вы можете попробовать все! <span class="price">Стоимость завтрака: 300 рублей, обеда: 500 рублей, ужина: 600 рублей.</span></li>
+                <li><strong>Стойка бармена:</strong> Наши профессиональные бармены приготовят для вас любой напиток по вашему желанию. <span class="price">Стоимость напитков и закусок от 100 рублей.</span></li>
+                <li><strong>Бильярдная:</strong> Аренда бильярдного стола. <span class="price">Стоимость: 500 рублей в час.</span></li>
+                <li><strong>Сауна с бассейном:</strong> Наслаждайтесь чистотой и теплом в нашей сауне. <span class="price">Стоимость: 1000 рублей за час.</span></li>
+                <li><strong>Автомастерская:</strong> Не стоит беспокоиться о вашем автомобиле - наша мастерская заботится о нем. <span class="price">Стоимость зависит от сложности работ.</span></li>
+                <li><strong>Аренда мест для ночлега:</strong> Уютные номера для ночлега. <span class="price">Стоимость от 2000 рублей в сутки.</span></li>
+                <li><strong>Платная парковка:</strong> У нас есть удобная платная парковка для вашего автомобиля. <span class="price">Стоимость: 200 рублей в сутки.</span></li>
+            </ul>
+        </div>
+        <div class="service-description" id="about">
+            <h2>ОПИСАНИЕ:</h2>
+            <ul>
+                <li>Комплекс услуг, входящих в стоимость проживания:
+                    <ul>
+                        <li>- Ежедневная уборка в номерах;</li>
+                        <li>- Бесплатный Wi-Fi, спутниковое ТВ;</li>
+                        <li>- Бесплатная парковка для авто для постояльцев гостиницы;</li>
+                        <li>- Общая кухня с обеденной зоной;</li>
+                        <li>- Круглосуточный администратор отеля;</li>
+                    </ul>
+                </li>
+                <li>Душевые кабинки предоставляются бесплатно для наших гостей. Также доступен отдельный душ, чтобы                     обеспечить удобство и не занимать лишнее место.150 рублей за отдельный душ.</li>
+                <li>Возможны наличный и безналичный расчет.</li>
+            </ul>
+            <h2>ДОСТОПРИМЕЧАТЕЛЬНОСТИ:</h2>
+            <ul>
+                <li><strong>Памятник Катюша:</strong> Памятник знаменитому советскому реактивному зенитному орудию "Катюша". <span class="highlight">Памятник находится на территории гостиницы.</span><img src="https://sun9-9.userapi.com/impg/eWCaX1G4r07WrzP2yJa-E4H_dxLVnPVqIMFYSQ/zDsHZ38nU00.jpg?size=1280x955&quality=96&sign=b9baa0ff3d05a969b469c4cc161352f0&c_uniq_tag=flM-4tKUDeqcXfqYo05yV5w4TNUPopAEq-BKlBbZnI4&type=album" alt="Изображение для памятника Катюша" width="750"></li>
+                <li><strong>Памятник самодельной военной машине:</strong> Памятник самодельной военной машине. <span class="highlight">Памятник находится на территории гостиницы.</span><img src="https://avatars.mds.yandex.net/get-altay/9707320/2a0000018a0c323c31358bbe1693e75868e6/XXXL"  width="750"></li>
+            </ul>
+        </div>
+        <div class="contact-info" id="contact">
+            <div class="contact-container">
+                <h2>КОНТАКТЫ:</h2>
+                <p>+7 912 707 47 77</p>
+                <p>Кировская область, Нолинский район, посёлок Медведок</p>
+                <p>e-mail: e-moe@43.рф</p>
+                <div class="map-container">
+                    <iframe src="https://yandex.ru/map-widget/v1/org/yo_moyo/1764748515/?ll=49.994345%2C57.409476&z=14.26" width="100%" height="300" frameborder="0" allowfullscreen="true"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Кнопка "Забронировать" -->
+<button class="booking-btn" onclick="toggleBookingForm()">Забронировать</button>
+
+
+   <!-- Форма бронирования -->
+<div class="booking-form" id="bookingForm">
+    <h2>Бронирование</h2>
+    <form onsubmit="submitBookingForm(event); return false;">
+
+        <label for="date">Дата бронирования:</label>
+        <input type="date" id="date" name="date" required>
+
+        <label for="phone">Номер телефона:</label>
+        <input type="tel" id="phone" name="phone" placeholder="Введите номер телефона" required>
+
+        <label for="name">ФИО:</label>
+        <input type="text" id="name" name="name" placeholder="Введите ФИО" required>
+
+        <label for="numberOfAdults">Количество взрослых:</label>
+        <input type="number" id="numberOfAdults" name="numberOfAdults" min="1" required>
+
+        <label for="numberOfChildren">Количество детей:</label>
+        <input type="number" id="numberOfChildren" name="numberOfChildren" min="0" required>
+
+        <input type="submit" value="Забронировать">
+        <button onclick="closeBookingForm()">Закрыть</button>
+    </form>
+</div>
+
+
+ <!-- Элемент для вывода сообщений -->
+    <div id="message"></div>
+
+    <!-- Кнопка "Вверх" -->
+    <button id="btnUp" onclick="scrollToTop()">Вверх</button>
+
+    <!-- Кнопка "Вниз" -->
+    <button id="btnDown" onclick="scrollToBottom()">Вниз</button>
+
+    <script>
+        // Функция для прокрутки страницы вверх
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Функция для прокрутки страницы вниз
+        function scrollToBottom() {
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+
+        // Отображение кнопок "Вверх" и "Вниз" при прокрутке страницы
+        window.onscroll = function() {scrollFunction()};
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                document.getElementById("btnUp").style.display = "block";
+            } else {
+                document.getElementById("btnUp").style.display = "none";
+            }
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                document.getElementById("btnDown").style.display = "none";
+            } else {
+                document.getElementById("btnDown").style.display = "block";
+            }
+        }
+ // Функция для отображения и скрытия формы бронирования
+        function toggleBookingForm() {
+            var bookingForm = document.getElementById("bookingForm");
+            if (bookingForm.style.display === "none") {
+                bookingForm.style.display = "block";
+            } else {
+                bookingForm.style.display = "none";
+            }
+        }
+
+// Функция для отображения и скрытия формы бронирования
+        function toggleBookingForm() {
+            var bookingForm = document.getElementById("bookingForm");
+            if (bookingForm.style.display === "none" || bookingForm.style.display === "") {
+                bookingForm.style.display = "block";
+            } else {
+                bookingForm.style.display = "none";
+            }
+        }
+
+        // Функция для закрытия формы бронирования
+        function closeBookingForm() {
+            var bookingForm = document.getElementById("bookingForm");
+            bookingForm.style.display = "none";
+        }
+
+  // Функция для отправки формы бронирования
+function submitBookingForm(event) {
+    // Запрещаем стандартное действие браузера по отправке формы
+    event.preventDefault();
+
+    // Оповещение пользователя
+    alert("Менеджер скоро с вами свяжется!");
+
+    // Закрыть форму бронирования
+    closeBookingForm();
+
+    // Опционально: можно также очистить форму после отправки
+    document.getElementById("date").value = "";
+    document.getElementById("phone").value = "";
+    document.getElementById("name").value = "";
+}
+
+
+
+    </script>
+</body>
+</html>
